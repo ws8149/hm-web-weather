@@ -1,51 +1,72 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from "react";
+import { ReactSearchAutocomplete } from "react-search-autocomplete";
+import "./App.css";
+import { mock_cities } from "./mock_cities.js";
 
-const App = () => {
-  const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+function App() {
 
-  const fetchData = async () => {
-    setIsLoading(true);
-    try {
-      const response = await axios.get('https://webapplication120240406185246.azurewebsites.net/api/cities');
-      setData(response.data);
-      console.log(response.data);
-    } catch (error) {
-      setError(error);
-    } finally {
-      setIsLoading(false);
-    }
+
+  const handleOnSearch = (string, results) => {
+    console.log(string, results);
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const handleOnHover = (result) => {
+    console.log(result);
+  };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  const handleOnSelect = (item) => {
+    console.log(item);
+  };
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+  const handleOnFocus = () => {
+    console.log("Focused");
+  };
 
-  if (!data) {
-    return <div>No data found</div>;
-  }
+  const handleOnClear = () => {
+    console.log("Cleared");
+  };
 
   return (
-    <div>
-      <h1>My Data</h1>
-      loop through the data and display
-      {data.map((item) => (
-        <div key={item.id}>
-          <p>Name: {item.name}</p>
+    <div className="App">
+      <header className="App-header">
+        <div style={{ width: 200, margin: 20 }}>
+          {/* <img
+            src={logo}
+            alt="logo"
+            style={{ width: "100%", marginBottom: 20 }}
+          /> */}
+          <ReactSearchAutocomplete
+            items={mock_cities}
+            fuseOptions={{ keys: ["name"] }} // Search on both fields
+            resultStringKeyName="name" // String to display in the results
+            onSearch={handleOnSearch}
+            onHover={handleOnHover}
+            onSelect={handleOnSelect}
+            onFocus={handleOnFocus}
+            onClear={handleOnClear}
+            showIcon={false}
+            styling={{
+              // height: "34px",
+              // border: "1px solid darkgreen",
+              // borderRadius: "4px",
+              // backgroundColor: "white",
+              // boxShadow: "none",
+              // hoverBackgroundColor: "lightgreen",
+              // color: "darkgreen",
+              // fontSize: "12px",
+              // fontFamily: "Courier",
+              // iconColor: "green",
+              // lineColor: "lightgreen",
+              // placeholderColor: "darkgreen",
+              // clearIconMargin: "3px 8px 0 0",
+              // zIndex: 2,
+            }}
+          />
+          <div style={{ marginTop: 20 }}>City Weather</div>
         </div>
-      ))}
+      </header>
     </div>
   );
-};
+}
 
 export default App;
