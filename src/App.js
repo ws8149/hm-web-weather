@@ -1,29 +1,59 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import "./App.css";
-import { mock_cities } from "./mock_cities.js";
+// import { mock_cities } from "./mock_cities.js";
 import { mock_weather } from "./mock_weather.js";
+
+import axios from 'axios';
 
 
 function App() {
-  const handleOnSearch = (string, results) => {
-    console.log(string, results);
+  const [weatherData, setWeatherData ] = useState([]);
+  const [citiesData, setCitiesData] = useState([]);
+  const [selectedCity, setSelectedCity] = useState([]);
+
+  const [isLoadingCities, setIsLoadingCities] = useState(false);
+  const [isLoadingWeather, setIsLoadingWeather] = useState(false);
+
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    getCitiesAPI();
+  }, []);
+
+  const getCitiesAPI = async () => {
+    setIsLoadingCities(true);
+    try {
+      // W-TODO: Shorten
+      const response = await axios.get('https://webapplication120240406185246.azurewebsites.net/api/cities');
+      setCitiesData(response.data);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setIsLoadingCities(false);
+    }
   };
 
-  const handleOnHover = (result) => {
-    console.log(result);
+  const postWeatherAPI = async (cityData) => {
+    setIsLoadingWeather(true);
+    try {
+      // W-TODO: Shorten
+      const response = await axios.post('https://webapplication120240406185246.azurewebsites.net/api/weather/forecast', cityData);
+      setWeatherData(response.data["list"]);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setIsLoadingWeather(false);
+    }
   };
 
-  const handleOnSelect = (item) => {
-    console.log(item);
-  };
 
-  const handleOnFocus = () => {
-    console.log("Focused");
+  const handleOnSelect = (cityData) => {
+    postWeatherAPI(cityData);
   };
 
   const handleOnClear = () => {
-    console.log("Cleared");
+    setWeatherData([]);
   };
 
   const convertUnixTimestampToString = (timestamp) => {
@@ -40,6 +70,26 @@ function App() {
   const formatProbability = (pop) => {
     const percentage = (pop * 100).toFixed(0);
     return percentage + "% chance of rain";
+  }
+
+  const massageData = (data) => {
+    const groupedByDay = data.reduce((acc, item) => {
+      // Create a Date object from the timestamp
+      const date = new Date(item.dt * 1000);
+    
+      // Get the year, month, and day as a key string
+      const key = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+    
+      // Initialize the array for this day if it doesn't exist
+      acc[key] = acc[key] || [];
+    
+      // Add the item to the corresponding day array
+      acc[key].push(item);
+    
+      return acc;
+    }, {});
+
+    return groupedByDay;
   }
   
 
@@ -64,25 +114,45 @@ function App() {
     )
   }
 
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  if (!weatherData) {
+    return <div>Error: Cities list is empty</div>;
+  }
+
   return (
     <div className="App">
       <header className="App-header">
         <div style={{ width: 250, margin: 20 }}>
           
-          <ReactSearchAutocomplete
-            items={mock_cities}
-            fuseOptions={{ keys: ["name"] }} // Search on both fields
-            resultStringKeyName="name" // String to display in the results
-            onSearch={handleOnSearch}
-            onHover={handleOnHover}
-            onSelect={handleOnSelect}
-            onFocus={handleOnFocus}
-            onClear={handleOnClear}
-            showIcon={false}
-            placeholder="Search for a city"
-          />
           {
-            mock_weather["list"].map((item) => {
+            isLoadingCities
+            ?
+            <div>Loading Cities..</div>
+            :
+            <ReactSearchAutocomplete
+              items={citiesData}
+              fuseOptions={{ keys: ["name"] }}
+              resultStringKeyName="name" 
+              onSelect={handleOnSelect}
+              onClear={handleOnClear}
+              showIcon={false}
+              placeholder="Search for a city"
+            />
+          }
+
+          {
+          isLoadingWeather
+          ?
+          <div>Loading Weather..</div>
+          :
+          weatherData.length === 0 
+          ? 
+            <div></div> 
+          :
+           weatherData.map((item) => {
               return (<WeatherDetails item={item}/>)
             })
           }
