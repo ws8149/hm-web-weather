@@ -10,7 +10,6 @@ import axios from 'axios';
 function App() {
   const [weatherData, setWeatherData ] = useState([]);
   const [citiesData, setCitiesData] = useState([]);
-  const [selectedCity, setSelectedCity] = useState([]);
 
   const [isLoadingCities, setIsLoadingCities] = useState(false);
   const [isLoadingWeather, setIsLoadingWeather] = useState(false);
@@ -56,10 +55,16 @@ function App() {
     setWeatherData([]);
   };
 
-  const convertUnixTimestampToString = (timestamp) => {
+  const convertUnixTimestampToDate = (timestamp) => {
     const date = new Date(timestamp * 1000);
     const options = { weekday: 'long', day: 'numeric', month: 'long' };
     return date.toLocaleDateString('en-MY', options);
+  };
+
+  const convertUnixTimestampToTime = (timestamp) => {
+    const date = new Date(timestamp * 1000);
+    const options = { hour: 'numeric', minute: 'numeric', hour12: true };
+    return date.toLocaleTimeString('en-US', options);
   };
 
   const formatTemperature = (temp) => {
@@ -95,7 +100,9 @@ function App() {
 
 
   const WeatherDetails = ({item}) => {
-    const date = convertUnixTimestampToString(item["dt"])
+    const date = convertUnixTimestampToDate(item["dt"])
+    const time = convertUnixTimestampToTime(item["dt"])
+
     const temp = formatTemperature(item["main"]["temp"]);
     const weather = item["weather"][0]["main"];
     const probability = formatProbability(item["pop"]);
@@ -105,6 +112,7 @@ function App() {
         <div className="w-row" style={{display: "flex"}}> 
           <div className="w-col-2">
             <div>{date}</div>
+            <div>{time}</div>
             <div>{weather}</div>
             <div>{temp}</div>
             <div>{probability}</div>
