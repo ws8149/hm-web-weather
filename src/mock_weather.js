@@ -3,45 +3,45 @@ export const mock_weather = {
     "message": 0,
     "cnt": 40,
     "list": [
-      {
-        "dt": 1712674800,
-        "main": {
-          "temp": 28.89,
-          "feels_like": 33.62,
-          "temp_min": 28.89,
-          "temp_max": 28.89,
-          "pressure": 1007,
-          "sea_level": 1007,
-          "grnd_level": 1007,
-          "humidity": 76,
-          "temp_kf": 0
-        },
-        "weather": [
-          {
-            "id": 500,
-            "main": "Rain",
-            "description": "light rain",
-            "icon": "10d"
-          }
-        ],
-        "clouds": {
-          "all": 100
-        },
-        "wind": {
-          "speed": 6.02,
-          "deg": 172,
-          "gust": 6
-        },
-        "visibility": 10000,
-        "pop": 0.44,
-        "rain": {
-          "3h": 0.25
-        },
-        "sys": {
-          "pod": "d"
-        },
-        "dt_txt": "2024-04-09 15:00:00"
-      },
+      // {
+      //   "dt": 1712674800,
+      //   "main": {
+      //     "temp": 28.89,
+      //     "feels_like": 33.62,
+      //     "temp_min": 28.89,
+      //     "temp_max": 28.89,
+      //     "pressure": 1007,
+      //     "sea_level": 1007,
+      //     "grnd_level": 1007,
+      //     "humidity": 76,
+      //     "temp_kf": 0
+      //   },
+      //   "weather": [
+      //     {
+      //       "id": 500,
+      //       "main": "Rain",
+      //       "description": "light rain",
+      //       "icon": "10d"
+      //     }
+      //   ],
+      //   "clouds": {
+      //     "all": 100
+      //   },
+      //   "wind": {
+      //     "speed": 6.02,
+      //     "deg": 172,
+      //     "gust": 6
+      //   },
+      //   "visibility": 10000,
+      //   "pop": 0.44,
+      //   "rain": {
+      //     "3h": 0.25
+      //   },
+      //   "sys": {
+      //     "pod": "d"
+      //   },
+      //   "dt_txt": "2024-04-09 15:00:00"
+      // },
       {
         "dt": 1712685600,
         "main": {
