@@ -143,7 +143,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <div style={{ width: 1000, margin: 20 }}>
+        <div style={{ width: '80%', margin: '15px auto' }}>
           
           {
             isLoadingCities
