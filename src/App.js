@@ -64,7 +64,7 @@ function App() {
 
   const convertUnixTimestampToTime = (timestamp) => {
     const date = new Date(timestamp * 1000);
-    const options = { hour: 'numeric', minute: 'numeric', hour12: true };
+    const options = { hour: 'numeric', hour12: true };
     return date.toLocaleTimeString('en-US', options);
   };
 
@@ -75,7 +75,7 @@ function App() {
 
   const formatProbability = (pop) => {
     const percentage = (pop * 100).toFixed(0);
-    return percentage + "% chance of rain";
+    return percentage + "% Rain";
   }
 
   const massageData = (data) => {
@@ -97,8 +97,16 @@ function App() {
 
     return groupedByDay;
   }
-  
 
+  // Get date in format "2024-04-01" for key usage in weatherData
+  const getWeatherDataKey = (daysToAdd) => {
+    const date = new Date();
+    date.setDate(date.getDate() + daysToAdd);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    return `${year}-${month}-${day}`;
+  }
 
   const WeatherDetails = ({data}) => {
     //W-Todo: handle danger
@@ -171,10 +179,11 @@ function App() {
             <div></div> 
           :
           <div className="w-all" style={{padding: 15}}>
-            <WeatherDetails key={0} data={ weatherData["2024-4-10"]} />
-            <WeatherDetails key={0} data={ weatherData["2024-4-11"]} />
-            <WeatherDetails key={0} data={ weatherData["2024-4-12"]} />
-            <WeatherDetails key={0} data={ weatherData["2024-4-13"]} />
+            {
+              Object.keys(weatherData).map((key, index) => {
+                return <WeatherDetails key={index} data={weatherData[key]} />
+              })
+            }
           </div>
           }
         </div>
