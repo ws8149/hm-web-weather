@@ -38,7 +38,8 @@ function App() {
     try {
       // W-TODO: Shorten
       const response = await axios.post('https://webapplication120240406185246.azurewebsites.net/api/weather/forecast', cityData);
-      setWeatherData(response.data["list"]);
+      const data = massageData(response.data["list"]);
+      setWeatherData(data);
     } catch (error) {
       setError(error);
     } finally {
@@ -99,27 +100,36 @@ function App() {
   
 
 
-  const WeatherDetails = ({item}) => {
-    const date = convertUnixTimestampToDate(item["dt"])
-    const time = convertUnixTimestampToTime(item["dt"])
-
-    const temp = formatTemperature(item["main"]["temp"]);
-    const weather = item["weather"][0]["main"];
-    const probability = formatProbability(item["pop"]);
+  const WeatherDetails = ({data}) => {
+    //W-Todo: handle danger
+    const date = convertUnixTimestampToDate(data[0]["dt"])
 
     return (
-      <div className="w-col-1" style={{ padding: '15px' }}>
-        <div className="w-row" style={{display: "flex"}}> 
-          <div className="w-col-2">
-            <div>{date}</div>
-            <div>{time}</div>
-            <div>{weather}</div>
-            <div>{temp}</div>
-            <div>{probability}</div>
-          </div>
+      <div className="weather-details" style={{padding: 15}} >
+        <div>{date}</div>
+        <div className="wd-row" style={{display: 'flex', justifyContent: 'space-around'}}>
+          {
+            data.map((data,index) => {
+              const time = convertUnixTimestampToTime(data["dt"])
+              const temp = formatTemperature(data["main"]["temp"]);
+              const weather = data["weather"][0]["main"];
+              const probability = formatProbability(data["pop"]);
+
+              return (
+                <div className="wd-col" style={{ padding: '15px' }}>
+                    <div>{time}</div>
+                    <div>{weather}</div>
+                    <div>{temp}</div>
+                    <div>{probability}</div>
+                </div>
+              )
+            })
+          }
         </div>
       </div>
     )
+    
+
   }
 
   if (error) {
@@ -133,7 +143,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <div style={{ width: 250, margin: 20 }}>
+        <div style={{ width: 1000, margin: 20 }}>
           
           {
             isLoadingCities
@@ -160,9 +170,12 @@ function App() {
           ? 
             <div></div> 
           :
-           weatherData.map((item) => {
-              return (<WeatherDetails item={item}/>)
-            })
+          <div className="w-all" style={{padding: 15}}>
+            <WeatherDetails key={0} data={ weatherData["2024-4-10"]} />
+            <WeatherDetails key={0} data={ weatherData["2024-4-11"]} />
+            <WeatherDetails key={0} data={ weatherData["2024-4-12"]} />
+            <WeatherDetails key={0} data={ weatherData["2024-4-13"]} />
+          </div>
           }
         </div>
       </header>
