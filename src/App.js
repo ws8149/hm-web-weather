@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import "./App.css";
-// import { mock_cities } from "./mock_cities.js";
-import { mock_weather } from "./mock_weather.js";
-
 import axios from 'axios';
 
 
