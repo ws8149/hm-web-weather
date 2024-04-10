@@ -75,37 +75,23 @@ function App() {
 
   const formatProbability = (pop) => {
     const percentage = (pop * 100).toFixed(0);
-    return percentage + "% Rain";
+    return percentage + "% 🌧️";
   }
 
   const massageData = (data) => {
     const groupedByDay = data.reduce((acc, item) => {
-      // Create a Date object from the timestamp
       const date = new Date(item.dt * 1000);
     
-      // Get the year, month, and day as a key string
       const key = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
     
-      // Initialize the array for this day if it doesn't exist
       acc[key] = acc[key] || [];
     
-      // Add the item to the corresponding day array
       acc[key].push(item);
     
       return acc;
     }, {});
 
     return groupedByDay;
-  }
-
-  // Get date in format "2024-04-01" for key usage in weatherData
-  const getWeatherDataKey = (daysToAdd) => {
-    const date = new Date();
-    date.setDate(date.getDate() + daysToAdd);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    return `${year}-${month}-${day}`;
   }
 
   const WeatherDetails = ({data}) => {
@@ -151,7 +137,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <div style={{ width: '80%', margin: '15px auto' }}>
+        <div style={{ width: '100%', margin: '15px auto' }}>
           
           {
             isLoadingCities
