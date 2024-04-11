@@ -34,7 +34,11 @@ function App() {
     setIsLoadingWeather(true);
     try {
       // W-TODO: Shorten
-      const response = await axios.post('https://webapplication120240406185246.azurewebsites.net/api/weather/forecast', cityData);
+      const response = await axios.post('https://webapplication120240406185246.azurewebsites.net/api/weather/forecast', cityData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
       const data = massageData(response.data["list"]);
       setWeatherData(data);
     } catch (error) {
